@@ -62,7 +62,7 @@ services:
 
   frontend:
 
-    image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE}@sha256:<FRONTEND_DIGEST>
+    image: ${DOCKERHUB_USERNAME}/blinkit-clone-frontend@sha256:<FRONTEND_DIGEST>
     container_name: blinkit-frontend
     restart: unless-stopped
 
