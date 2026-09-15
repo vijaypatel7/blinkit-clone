@@ -18,7 +18,7 @@ test('GET /health returns ok (no DB required)', async () => {
 
 test('unknown route returns a structured 404', async () => {
   const app = createApp();
-  const res = await fetchTest(app, '/api/v1/does-not-exist');
+  const res = await fetchTest(app, '/does-not-exist');
   assert.equal(res.status, 404);
   assert.equal(res.body.success, false);
   assert.equal(res.body.error.code, 'NOT_FOUND');
