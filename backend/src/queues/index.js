@@ -5,8 +5,10 @@
  * request path (notifications, delivery assignment, analytics, inventory sync)
  * is enqueued here instead of blocking the response.
  */
+
 import { Queue } from 'bullmq';
 import { queueClient } from '../config/redis.js';
+import { env } from '../config/environment.js';
 
 /** Default worker/queue options shared across all queues. */
 const defaultOptions = {
@@ -19,17 +21,31 @@ const defaultOptions = {
   },
 };
 
-/** Order lifecycle side-effects (confirmations, analytics, auto-cancel). */
-export const orderQueue = new Queue('orders', defaultOptions);
+/**
+ * Queue creation is skipped during tests.
+ *
+ * The HTTP/application tests do not need BullMQ.
+ * This prevents Redis connections from keeping the Node test process alive.
+ */
+const createQueue = (name) => {
+  if (env.nodeEnv === 'test') {
+    return null;
+  }
+
+  return new Queue(name, defaultOptions);
+};
+
+/** Order lifecycle side-effects. */
+export const orderQueue = createQueue('orders');
 
 /** Inventory sync / restock / reservation-release jobs. */
-export const inventoryQueue = new Queue('inventory', defaultOptions);
+export const inventoryQueue = createQueue('inventory');
 
-/** Outbound notifications (push, SMS, email, WhatsApp). */
-export const notificationQueue = new Queue('notifications', defaultOptions);
+/** Outbound notifications. */
+export const notificationQueue = createQueue('notifications');
 
 /** Delivery assignment & tracking updates. */
-export const deliveryQueue = new Queue('delivery', defaultOptions);
+export const deliveryQueue = createQueue('delivery');
 
 export const queues = {
   orderQueue,

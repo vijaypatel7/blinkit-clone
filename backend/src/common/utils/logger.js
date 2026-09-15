@@ -6,15 +6,23 @@ import { env } from '../../config/environment.js';
  *
  * We use pino (fast, structured JSON logging) instead of console.log so logs
  * are machine-parseable and cheap enough to leave on in production.
+ *
+ * pino-pretty is enabled only during local development.
+ * Tests use the normal synchronous logger so the test process can exit cleanly.
  */
 export const logger = pino({
   level: env.logLevel,
   base: { service: 'blinkit-backend' },
   redact: ['req.headers.authorization', 'password', 'token', 'otp'],
   timestamp: pino.stdTimeFunctions.isoTime,
-  transport: env.isProduction
-    ? undefined
-    : { target: 'pino-pretty', options: { colorize: true } },
+
+  transport:
+    process.env.NODE_ENV === 'test' || env.isProduction
+      ? undefined
+      : {
+          target: 'pino-pretty',
+          options: { colorize: true },
+        },
 });
 
 /** Log a request-scoped child logger (attach request id if present). */

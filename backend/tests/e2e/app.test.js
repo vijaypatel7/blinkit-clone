@@ -32,14 +32,28 @@ async function fetchTest(app, path) {
   return new Promise((resolve, reject) => {
     const server = app.listen(0, async () => {
       const port = server.address().port;
+
       try {
-        const res = await fetch(`http://127.0.0.1:${port}${path}`);
+        const res = await fetch(`http://127.0.0.1:${port}${path}`, {
+          headers: {
+            connection: 'close',
+          },
+        });
+
         const body = await res.json().catch(() => null);
-        resolve({ status: res.status, body });
+
+        resolve({
+          status: res.status,
+          body,
+        });
       } catch (err) {
         reject(err);
       } finally {
-        server.close();
+        server.closeAllConnections();
+
+        await new Promise((resolveClose) => {
+          server.close(resolveClose);
+        });
       }
     });
   });
