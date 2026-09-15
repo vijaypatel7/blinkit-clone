@@ -18,8 +18,31 @@ jobs:
     name: Backend CI
     runs-on: ubuntu-latest
 
+    services:
+
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand(\"ping\").ok'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      - name: Checkout code
+
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -39,6 +62,11 @@ jobs:
 
       - name: Run tests
         working-directory: backend
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://127.0.0.1:27017/blinkit_test
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
         run: npm test
 
 
@@ -47,7 +75,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -65,6 +94,6 @@ jobs:
         working-directory: frontend
         run: npm test -- --run
 
-      - name: Build frontend
+      - name: Build
         working-directory: frontend
         run: npm run build
