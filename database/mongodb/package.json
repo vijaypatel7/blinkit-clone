@@ -1,0 +1,16 @@
+{
+  "name": "blinkit-clone-database",
+  "version": "1.0.0",
+  "description": "MongoDB schemas, indexes, validators, seed data and migrations for the Blinkit clone",
+  "type": "module",
+  "scripts": {
+    "seed": "node seed/index.js",
+    "indexes": "node indexes/index.js",
+    "validators": "node validators/index.js",
+    "migrate": "node migrations/001_initial.js"
+  },
+  "dependencies": {
+    "mongoose": "^8.5.1",
+    "ioredis": "^5.4.1"
+  }
+}

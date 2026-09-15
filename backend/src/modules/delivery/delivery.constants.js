@@ -1,0 +1,11 @@
+/**
+ * Delivery constants.
+ */
+export const DELIVERY_STATUS = {
+  UNASSIGNED: 'UNASSIGNED',
+  ASSIGNED: 'ASSIGNED',
+  PICKED_UP: 'PICKED_UP',
+  IN_TRANSIT: 'IN_TRANSIT',
+  DELIVERED: 'DELIVERED',
+  FAILED: 'FAILED',
+};

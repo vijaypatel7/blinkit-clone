@@ -1,0 +1,17 @@
+/**
+ * Notification constants.
+ */
+export const NOTIFICATION_CHANNELS = {
+  PUSH: 'PUSH',
+  SMS: 'SMS',
+  EMAIL: 'EMAIL',
+  WHATSAPP: 'WHATSAPP',
+};
+
+export const NOTIFICATION_TEMPLATES = {
+  OTP: 'OTP',
+  ORDER_CONFIRMED: 'ORDER_CONFIRMED',
+  ORDER_STATUS: 'ORDER_STATUS',
+  ORDER_DELIVERED: 'ORDER_DELIVERED',
+  OFFER: 'OFFER',
+};
